@@ -1,14 +1,12 @@
 const express = require('express');
 const mongoose = require('mongoose');
+const cors = require("cors");
+const productRoutes = require("./routes/productRoutes")
+const {errorHandler} = require("./middlewares/errorMiddleware");
+
 require('dotenv').config();
 const app = express();
 const port = 3000
-
-// app.use(bodyParser.urlencoded({ extended: true }));
-// app.use(bodyParser.json());
-app.get('/', (req, res) => {
-    res.send('Hello World!')
-})
 
 app.listen(process.env.APP_PORT, async () => {
     console.log(`Example app listening on port ${process.env.APP_PORT}`);
@@ -29,4 +27,18 @@ app.listen(process.env.APP_PORT, async () => {
     // }).catch(function (err) {
     //     console.log("Error!" + err);
     // });
-})
+});
+
+// app.use(bodyParser.urlencoded({ extended: true }));
+// app.use(bodyParser.json());
+app.use(cors());
+app.use(express.json());
+
+app.get('/', (req, res) => {
+    res.send('API is running...');
+});
+
+app.use('/api/products', productRoutes);
+
+app.use(errorHandler)
+
